@@ -72,6 +72,7 @@ public class Login {
      * Password must be at least eight characters long and contain
      * a capital letter, a number and a special character.
      */
+    // Uses regex to check for a capital letter, a number, and a special character
     public boolean checkPasswordComplexity() {
         if (password == null || password.length() < 8) {
             return false;
