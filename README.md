@@ -15,3 +15,4 @@ mvn test
 - `src/main/java/com/rosebank/prog5121/Login.java` — registration/login class and validation methods
 - `src/main/java/com/rosebank/prog5121/LoginApp.java` — console entry point
 - `src/test/java/com/rosebank/prog5121/LoginTest.java` — JUnit 5 tests from the assignment's test table
+## Moreblessing
