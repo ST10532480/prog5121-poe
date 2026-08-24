@@ -1,5 +1,6 @@
 package com.rosebank.prog5121;
-
+// Entry point for Part 1 console app
+`
 import java.util.Scanner;
 
 /**
