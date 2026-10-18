@@ -1,16 +1,18 @@
 package com.rosebank.prog5121;
-// Entry point for Part 1 console app
+// Entry point for the console app (Part 1 login, Part 2 QuickChat)
 
 import java.util.Scanner;
 
 /**
  * LoginApp.java
  *
- * Console application for Part 1: registers a user, then lets them
- * attempt to log in using the details they registered with.
- * Console only — no GUI / JOptionPane, as required by the brief.
+ * Console application: registers a user, lets them log in, and only once
+ * the login is successful starts QuickChat (Part 2) so they can send
+ * messages. Console only, no GUI / JOptionPane, as required by the brief.
  */
 public class LoginApp {
+
+    private static final int MAX_LOGIN_ATTEMPTS = 3;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -49,15 +51,28 @@ public class LoginApp {
         System.out.println();
         System.out.println("=== Login ===");
 
-        System.out.print("Enter username: ");
-        String loginUsername = scanner.nextLine();
+        // The user gets a few attempts; messages can only be sent after
+        // a successful login.
+        boolean loggedIn = false;
+        int attempts = 0;
+        while (!loggedIn && attempts < MAX_LOGIN_ATTEMPTS) {
+            System.out.print("Enter username: ");
+            String loginUsername = scanner.nextLine();
 
-        System.out.print("Enter password: ");
-        String loginPassword = scanner.nextLine();
+            System.out.print("Enter password: ");
+            String loginPassword = scanner.nextLine();
 
-        boolean loginSuccessful = user.loginUser(loginUsername, loginPassword);
-        String loginStatusMessage = user.returnLoginStatus(loginSuccessful);
-        System.out.println(loginStatusMessage);
+            loggedIn = user.loginUser(loginUsername, loginPassword);
+            System.out.println(user.returnLoginStatus(loggedIn));
+            attempts++;
+        }
+
+        if (loggedIn) {
+            System.out.println();
+            QuickChat.run(scanner);
+        } else {
+            System.out.println("Too many failed login attempts. Exiting.");
+        }
 
         scanner.close();
     }
