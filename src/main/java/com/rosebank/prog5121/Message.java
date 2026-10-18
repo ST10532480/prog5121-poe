@@ -10,26 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Message.java
- *
- * Part 2 of the PROG5121 POE: a single QuickChat message together with
- * the session-wide lists of messages that were sent or stored while the
- * program is running.
- *
- * Methods required by the brief:
- *   checkMessageID(), checkRecipientCell(), createMessageHash(),
- *   sentMessage(), printMessages(), returnTotalMessages() and
- *   storeMessage() (messages are stored in a JSON file).
- */
 public class Message {
-
-    // ---------- Rules and fixed messages from the brief ----------
-
     public static final int MAX_MESSAGE_LENGTH = 250;
     public static final int MAX_ID_LENGTH = 10;
 
-    // What the user can do with a message (menu options 1 to 3).
     public static final int SEND = 1;
     public static final int DISREGARD = 2;
     public static final int STORE = 3;
@@ -48,31 +32,22 @@ public class Message {
     public static final String MSG_STORE_FAILED = "Message could not be "
             + "stored; please try again.";
 
-    // ---------- Session data (lives while the program is running) ----------
-
     private static final SecureRandom RANDOM = new SecureRandom();
     private static final List<Message> sentMessages = new ArrayList<>();
     private static final List<Message> storedMessages = new ArrayList<>();
     private static Path storageFile = Paths.get("messages.json");
-
-    // ---------- One message ----------
 
     private final String messageID;
     private final int messageNumber;
     private final String recipient;
     private final String messageText;
 
-    /**
-     * Creates a message with a randomly generated ten-digit message ID.
-     *
-     * @param messageNumber the number of this message in the session,
-     *                      starting at 0 for the first message
-     */
+    
     public Message(int messageNumber, String recipient, String messageText) {
         this(generateMessageID(), messageNumber, recipient, messageText);
     }
 
-    /** Creates a message with a known ID (used for repeatable unit tests). */
+    
     public Message(String messageID, int messageNumber, String recipient,
                    String messageText) {
         this.messageID = messageID;
@@ -80,8 +55,6 @@ public class Message {
         this.recipient = recipient;
         this.messageText = messageText;
     }
-
-    // ---------- Getters ----------
 
     public String getMessageID() {
         return messageID;
@@ -99,9 +72,7 @@ public class Message {
         return messageText;
     }
 
-    // ---------- Message ID ----------
-
-    /** Randomly generates a ten-digit message ID (leading zeros allowed). */
+    
     public static String generateMessageID() {
         StringBuilder id = new StringBuilder(MAX_ID_LENGTH);
         for (int i = 0; i < MAX_ID_LENGTH; i++) {
@@ -110,24 +81,18 @@ public class Message {
         return id.toString();
     }
 
-    /** The message ID must not be more than ten characters long. */
+    
     public boolean checkMessageID() {
         return messageID != null && !messageID.isEmpty()
                 && messageID.length() <= MAX_ID_LENGTH;
     }
 
-    /** Confirmation shown when the ID has been created. */
+    
     public String getMessageIDStatus() {
         return "Message ID generated: " + messageID;
     }
 
-    // ---------- Message length ----------
-
-    /**
-     * The message must not be more than 250 characters long. Returns the
-     * success message, or the error saying by how many characters the
-     * message is too long.
-     */
+    
     public String checkMessageLength() {
         int length = (messageText == null) ? 0 : messageText.length();
         if (length <= MAX_MESSAGE_LENGTH) {
@@ -137,32 +102,18 @@ public class Message {
                 + (length - MAX_MESSAGE_LENGTH) + "; please reduce the size.";
     }
 
-    // ---------- Recipient ----------
-
-    /**
-     * True when the recipient number starts with the international code and
-     * is no more than ten characters long. This re-uses the cell phone rule
-     * that was built and tested in Part 1 (Login.checkCellPhoneNumber).
-     */
+    
     public boolean isRecipientValid() {
         return new Login("", "", "", "", recipient).checkCellPhoneNumber();
     }
 
-    /** Returns the success or failure message for the recipient number. */
+    
     public String checkRecipientCell() {
         return isRecipientValid() ? RECIPIENT_OK : RECIPIENT_BAD;
     }
 
-    // ---------- Message hash ----------
-
-    /**
-     * Creates the message hash: the first two digits of the message ID, a
-     * colon, the message number, a colon, then the first and last words of
-     * the message, all in capital letters.
-     *
-     * Example: ID 0012345678, message number 0 and the message "Hi Mike,
-     * can you join us for dinner tonight?" gives 00:0:HITONIGHT.
-     */
+    
+    // Hash format: first two ID digits : message number : first and last word, e.g. 00:0:HITONIGHT
     public String createMessageHash() {
         String idPart = (messageID == null) ? ""
                 : messageID.substring(0, Math.min(2, messageID.length()));
@@ -182,12 +133,7 @@ public class Message {
         return word.replaceAll("[^A-Za-z0-9]", "");
     }
 
-    // ---------- Send / disregard / store ----------
-
-    /**
-     * Applies the user's choice (1 = send, 2 = disregard, 3 = store) and
-     * returns the message the system must show.
-     */
+    
     public String sentMessage(int choice) {
         if (choice != SEND && choice != DISREGARD && choice != STORE) {
             return MSG_INVALID_CHOICE;
@@ -196,7 +142,6 @@ public class Message {
             return MSG_DISREGARDED;
         }
 
-        // A message that breaks the rules can be neither sent nor stored.
         if (!isRecipientValid()) {
             return RECIPIENT_BAD;
         }
@@ -211,7 +156,7 @@ public class Message {
         return storeMessage() ? MSG_STORED : MSG_STORE_FAILED;
     }
 
-    /** Lets the user choose to send, disregard or store this message. */
+    
     public String sentMessage(Scanner scanner) {
         int choice = 0;
         while (choice < SEND || choice > STORE) {
@@ -231,9 +176,7 @@ public class Message {
         return sentMessage(choice);
     }
 
-    // ---------- Display ----------
-
-    /** The full details of this message, in the order the brief asks for. */
+    
     public String getDetails() {
         String nl = System.lineSeparator();
         return "Message ID: " + messageID + nl
@@ -242,7 +185,7 @@ public class Message {
                 + "Message: " + messageText;
     }
 
-    /** Returns every message that was sent while the program is running. */
+    
     public static String printMessages() {
         StringBuilder all = new StringBuilder();
         for (Message message : sentMessages) {
@@ -252,19 +195,12 @@ public class Message {
         return all.toString();
     }
 
-    /** Returns the total number of messages sent. */
+    
     public static int returnTotalMessages() {
         return sentMessages.size();
     }
 
-    // ---------- JSON storage ----------
-
-    /**
-     * Stores this message in the JSON file (messages.json by default).
-     * Every stored message is kept in one JSON array.
-     *
-     * @return true if the file was written successfully
-     */
+    
     public boolean storeMessage() {
         storedMessages.add(this);
         try {
@@ -277,7 +213,7 @@ public class Message {
         }
     }
 
-    /** Builds the JSON text for a list of messages (no library needed). */
+    
     static String toJson(List<Message> messages) {
         StringBuilder json = new StringBuilder("[");
         for (int i = 0; i < messages.size(); i++) {
@@ -295,7 +231,7 @@ public class Message {
         return json.toString();
     }
 
-    /** Escapes quotes, backslashes and control characters for JSON. */
+    
     private static String escape(String text) {
         if (text == null) {
             return "";
@@ -319,14 +255,12 @@ public class Message {
         return out.toString();
     }
 
-    // ---------- Session helpers ----------
-
-    /** Where stored messages are written (changed in unit tests). */
+    
     public static void setStorageFile(Path file) {
         storageFile = file;
     }
 
-    /** Clears the sent and stored lists and restores the default file. */
+    
     public static void resetSession() {
         sentMessages.clear();
         storedMessages.clear();

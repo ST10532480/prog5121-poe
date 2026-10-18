@@ -3,19 +3,7 @@ package com.rosebank.prog5121;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-/**
- * QuickChat.java
- *
- * Part 2 of the PROG5121 POE: the QuickChat menu. It is only started after
- * the user has logged in successfully (see LoginApp).
- *
- * A while loop keeps the menu running until the user chooses Quit, and a
- * for loop lets the user enter exactly the number of messages they chose
- * when the application started. Console only, no GUI.
- */
 public class QuickChat {
-
-    /** Runs QuickChat until the user selects Quit. */
     public static void run(Scanner scanner) {
         System.out.println("Welcome to QuickChat.");
 
@@ -34,7 +22,6 @@ public class QuickChat {
                             System.out.println("You have already entered all "
                                     + allowedMessages + " messages.");
                         } else {
-                            // The for loop only allows the set number of messages.
                             for (int i = enteredMessages; i < allowedMessages; i++) {
                                 enterMessage(scanner, i, allowedMessages);
                             }
@@ -59,8 +46,6 @@ public class QuickChat {
         }
     }
 
-    // ---------- Menu ----------
-
     private static void printMenu() {
         System.out.println();
         System.out.println("1) Send Messages");
@@ -68,7 +53,7 @@ public class QuickChat {
         System.out.println("3) Quit");
     }
 
-    /** Returns 1 to 3, or -1 if the input is not a number. */
+    
     private static int readMenuChoice(Scanner scanner) {
         System.out.print("Choose an option (1-3): ");
         try {
@@ -78,7 +63,7 @@ public class QuickChat {
         }
     }
 
-    /** Asks how many messages the user wants to enter (must be 1 or more). */
+    
     private static int askNumberOfMessages(Scanner scanner) {
         while (true) {
             System.out.print("How many messages do you wish to enter? ");
@@ -88,13 +73,10 @@ public class QuickChat {
                     return count;
                 }
             } catch (NumberFormatException e) {
-                // fall through to the message below
             }
             System.out.println("Please enter a whole number greater than 0.");
         }
     }
-
-    // ---------- One message ----------
 
     private static void enterMessage(Scanner scanner, int index, int total) {
         System.out.println();
@@ -110,7 +92,6 @@ public class QuickChat {
         System.out.println(result);
 
         if (Message.MSG_SENT.equals(result)) {
-            // Full details are shown once the message has been sent.
             System.out.println(message.getDetails());
         } else if (Message.MSG_DISREGARDED.equals(result)) {
             String answer = scanner.nextLine().trim();
@@ -119,7 +100,7 @@ public class QuickChat {
         }
     }
 
-    /** Keeps asking until the recipient number is correctly formatted. */
+    
     private static String readRecipient(Scanner scanner, int index) {
         while (true) {
             System.out.print("Enter the recipient's cell phone number "
@@ -134,7 +115,7 @@ public class QuickChat {
         }
     }
 
-    /** Keeps asking until the message is not empty and within 250 characters. */
+    
     private static String readMessageText(Scanner scanner, int index,
                                           String recipient) {
         while (true) {

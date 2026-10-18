@@ -13,19 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * MessageTest.java
- *
- * Unit tests for Part 2, using the test data and expected system
- * responses from the assignment brief.
- *
- * Test Case 1: +27718693002, "Hi Mike, can you join us for dinner
- *              tonight?", Send
- * Test Case 2: 08575975889, "Hi Keegan, did you receive the payment?",
- *              Disregard
- */
 class MessageTest {
-
     private static final String TEXT_1 = "Hi Mike, can you join us for dinner tonight?";
     private static final String TEXT_2 = "Hi Keegan, did you receive the payment?";
 
@@ -46,8 +34,6 @@ class MessageTest {
         return new Message("0087654321", 1, "08575975889", TEXT_2);
     }
 
-    // ---------- Message length ----------
-
     @Test
     void messageUnder250Characters_returnsReadyToSend() {
         assertEquals("Message ready to send.", testCase1().checkMessageLength());
@@ -67,8 +53,6 @@ class MessageTest {
         assertEquals("Message ready to send.", message.checkMessageLength());
     }
 
-    // ---------- Recipient ----------
-
     @Test
     void recipientCorrectlyFormatted_returnsSuccess() {
         assertEquals("Cell phone number successfully captured.",
@@ -82,8 +66,6 @@ class MessageTest {
                         + "number and try again.",
                 testCase2().checkRecipientCell());
     }
-
-    // ---------- Message hash ----------
 
     @Test
     void messageHashIsCorrect_testCase1() {
@@ -99,8 +81,6 @@ class MessageTest {
             assertEquals(expectedHashes[i], messages[i].createMessageHash());
         }
     }
-
-    // ---------- Message ID ----------
 
     @Test
     void messageIDIsCreated_tenDigitsAndAnnounced() {
@@ -118,8 +98,6 @@ class MessageTest {
         Message message = new Message("12345678901", 0, "+27718693002", TEXT_1);
         assertFalse(message.checkMessageID());
     }
-
-    // ---------- Send / disregard / store ----------
 
     @Test
     void userSelectsSend_returnsMessageSent() {
@@ -144,17 +122,14 @@ class MessageTest {
 
     @Test
     void messageWithBadRecipient_cannotBeSent() {
-        // Test Case 2 has an incorrectly formatted number, so it must not send.
         assertEquals(Message.RECIPIENT_BAD, testCase2().sentMessage(Message.SEND));
         assertEquals(0, Message.returnTotalMessages());
     }
 
-    // ---------- Totals and printing ----------
-
     @Test
     void totalMessagesSent_countsOnlySentMessages() {
-        testCase1().sentMessage(Message.SEND);        // sent
-        testCase2().sentMessage(Message.DISREGARD);   // disregarded
+        testCase1().sentMessage(Message.SEND);
+        testCase2().sentMessage(Message.DISREGARD);
         assertEquals(1, Message.returnTotalMessages());
     }
 
@@ -175,8 +150,6 @@ class MessageTest {
     void printMessages_isEmptyBeforeAnythingIsSent() {
         assertEquals("", Message.printMessages());
     }
-
-    // ---------- JSON storage ----------
 
     @Test
     void storedMessage_isWrittenToTheJsonFile() throws IOException {

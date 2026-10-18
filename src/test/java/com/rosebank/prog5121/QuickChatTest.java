@@ -13,14 +13,7 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * QuickChatTest.java
- *
- * Runs the QuickChat menu with scripted keyboard input and checks what the
- * user sees on the console.
- */
 class QuickChatTest {
-
     private final PrintStream originalOut = System.out;
     private ByteArrayOutputStream captured;
 
@@ -40,7 +33,7 @@ class QuickChatTest {
         System.setOut(originalOut);
     }
 
-    /** Runs QuickChat with the given lines typed by the user. */
+    
     private String runWith(String... lines) {
         QuickChat.run(new Scanner(String.join("\n", lines) + "\n"));
         return captured.toString();
@@ -73,12 +66,12 @@ class QuickChatTest {
     @Test
     void sendOneMessage_showsDetailsAndTotal() {
         String output = runWith(
-                "1",                                   // one message
-                "1",                                   // Send Messages
+                "1",
+                "1",
                 "+27718693002",
                 "Hi Mike, can you join us for dinner tonight?",
-                "1",                                   // Send Message
-                "3");                                  // Quit
+                "1",
+                "3");
 
         assertTrue(output.contains("Cell phone number successfully captured."));
         assertTrue(output.contains("Message ready to send."));
@@ -94,16 +87,16 @@ class QuickChatTest {
     @Test
     void twoMessages_oneSentOneDisregarded_totalIsOne() {
         String output = runWith(
-                "2",                                   // two messages
-                "1",                                   // Send Messages
+                "2",
+                "1",
                 "+27718693002",
                 "Hi Mike, can you join us for dinner tonight?",
-                "1",                                   // Send
+                "1",
                 "+27857597588",
                 "Hi Keegan, did you receive the payment?",
-                "2",                                   // Disregard
-                "0",                                   // delete it
-                "3");                                  // Quit
+                "2",
+                "0",
+                "3");
 
         assertTrue(output.contains("Press 0 to delete the message."));
         assertTrue(output.contains("Message deleted."));
@@ -116,8 +109,8 @@ class QuickChatTest {
                 "1", "1",
                 "+27718693002",
                 "Hi Mike, can you join us for dinner tonight?",
-                "3",                                   // Store Message
-                "3");                                  // Quit
+                "3",
+                "3");
 
         assertTrue(output.contains("Message successfully stored."));
         assertTrue(output.contains("Total number of messages sent: 0"));
@@ -127,7 +120,7 @@ class QuickChatTest {
     void badRecipient_isRejectedAndAskedAgain() {
         String output = runWith(
                 "1", "1",
-                "08575975889",                         // no international code
+                "08575975889",
                 "+27857597588",
                 "Hi Keegan, did you receive the payment?",
                 "1", "3");
@@ -155,12 +148,12 @@ class QuickChatTest {
     @Test
     void onlyTheChosenNumberOfMessagesCanBeEntered() {
         String output = runWith(
-                "1",                                   // only one message allowed
+                "1",
                 "1",
                 "+27718693002",
                 "Hi Mike, can you join us for dinner tonight?",
                 "1",
-                "1",                                   // try to send more
+                "1",
                 "3");
 
         assertTrue(output.contains("You have already entered all 1 messages."));

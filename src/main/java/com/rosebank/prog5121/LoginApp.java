@@ -1,17 +1,8 @@
 package com.rosebank.prog5121;
-// Entry point for the console app (Part 1 login, Part 2 QuickChat)
 
 import java.util.Scanner;
 
-/**
- * LoginApp.java
- *
- * Console application: registers a user, lets them log in, and only once
- * the login is successful starts QuickChat (Part 2) so they can send
- * messages. Console only, no GUI / JOptionPane, as required by the brief.
- */
 public class LoginApp {
-
     private static final int MAX_LOGIN_ATTEMPTS = 3;
 
     public static void main(String[] args) {
@@ -51,8 +42,6 @@ public class LoginApp {
         System.out.println();
         System.out.println("=== Login ===");
 
-        // The user gets a few attempts; messages can only be sent after
-        // a successful login.
         boolean loggedIn = false;
         int attempts = 0;
         while (!loggedIn && attempts < MAX_LOGIN_ATTEMPTS) {
