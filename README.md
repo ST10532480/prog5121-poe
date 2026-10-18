@@ -19,3 +19,14 @@ mvn test
 
 ## Testing
 All methods were verified using JUnit 5 tests in LoginTest.java, covering valid and invalid username, password, and cell phone formats, plus login success and failure cases.
+## Part 2: Sending Messages (QuickChat)
+
+After a successful login the app starts QuickChat:
+
+- Welcome message, then the user chooses how many messages to enter.
+- Menu: 1) Send Messages, 2) Show recently sent messages ("Coming Soon."), 3) Quit.
+- Each message has a random ten-digit ID, a recipient (international code, max ten digits), a message of up to 250 characters and a message hash (for example `00:0:HITONIGHT`).
+- For each message the user can send it, disregard it, or store it in `messages.json`.
+- The total number of messages sent is shown at the end.
+
+Run the app and the tests the same way as Part 1 (`mvn test`). GitHub Actions runs the tests automatically on every push (`.github/workflows/maven.yml`).
